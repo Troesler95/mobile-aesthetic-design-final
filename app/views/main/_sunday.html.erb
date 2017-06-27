@@ -1,0 +1,28 @@
+<%
+  counter = 8
+  13.times do
+    if counter < 12
+%>
+        <div id="time-block">
+          <h1 class="time"><%= counter %>:00AM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <% elsif counter == 12 %>
+        <div id="time-block">
+          <h1 class="time"><%= counter %>:00PM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <% else %>
+        <div id="time-block">
+          <h1 class="time"><%= counter - 12 %>:00PM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <%end
+      counter+=1
+      end %>

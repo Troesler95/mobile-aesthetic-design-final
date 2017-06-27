@@ -1,0 +1,134 @@
+<!--container for sliding nav-->
+<div class="nav-container">
+  <div class="nav-head"><p>MENU</p></div>
+  <ul class="nav-list">
+    <li class="nav-item"><a href="#"><i class="fa fa-calendar"></i><p>My Schedule</p></a></li>
+    <li class="nav-item"><a href="#"><i class="fa fa-calendar-plus-o"></i><p>New Schedule</p></a></li>
+    <li class="nav-item"><a href="#"><i class="fa fa-plus"></i><p>Add Event</p></a></li>
+    <li class="nav-item"><a href="#"><i class="fa fa-pencil"></i><p>Edit Events</p></a></li>
+    <li class="nav-item"><a href="#"><i class="fa fa-user-circle-o"></i><p>My Profile</p></a></li>
+    <li class="nav-item"><a href="/"><i class="fa fa-power-off"></i><p>Log Out</p></a></li>
+  </ul>
+</div>
+
+<div class="page-container">
+  <header>
+    <div class="hamburger">
+      <div class="hamburger-icon"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></div>
+    </div>
+    <h1 class="header-text">Student Adviser</h1>
+  </header>
+  <section class="day-head">
+<!--
+    <h1 class="day-text">MONDAY</h1><div class="tri-cont"><span class="triangle"></span></div>
+-->
+    <dl class="day-drop">
+      <dt><a href="#"><span class="day">MONDAY</span><span class="triangle"></span></a></dt>
+      <dd>
+        <ul>
+          <li><a href="#">SUNDAY</a></li>
+          <li><a href="#">MONDAY</a></li>
+          <li><a href="#">TUESDAY</a></li>
+          <li><a href="#">WEDNESDAY</a></li>
+          <li><a href="#">THURSDAY</a></li>
+          <li><a href="#">FRIDAY</a></li>
+          <li><a href="#">SATURDAY</a></li>
+        </ul>
+      </dd>
+    </dl>
+
+    <!--ADD BUTTON FOR ADDING EVENTS-->
+    <div class="add-event"><i class="fa fa-plus fa-2x"></i></div>
+  </section>
+  <div id="timeline">
+    <div class="loading-overlay">
+      <h1 class="loading-text">loading your schedule...</h1>
+      <i class="fa fa-pulse fa-spinner fa-3x fa-fw"></i>
+    </div>
+    <!--
+      TODO:
+          1. create timeline grid
+            - how can we conserve space/resources by condensing what we don't use?
+          2. get all events from server
+          3. display them in timeline
+          $.get('/events').then( data => ...
+      -->
+    <!--LOGIC TO GENERATE TIMELINE-->
+
+    <!--LOGIC TO LOAD EVENTS-->
+  </div>
+</div>
+
+<!--NAV BAR SCRIPT-->
+<script type="text/javascript" charset="utf-8">
+  function getDay(day) {
+    //show loading overlay until done
+    $('.loading-overlay').show();
+    $.ajax({
+      type: "GET",
+      url: "/send-day",
+      data: {day: day},
+      success: function(result){
+        $('#timeline').html(result);
+        }
+    });
+    $('.loading-overlay').fadeOut(300);
+  }
+
+  $(document).ready(function () {
+    //add event listener to the hamburger div
+    $('.hamburger').on("click", function () {
+      if ($(this).hasClass("expanded")) {
+        console.log("has class expanded");
+        $('.page-container').animate({position: 'absolute', left: "0px"},
+            {duration: 400, easing: 'easeOutCubic', queue: false});
+        $('.nav-container').animate({left: "-55vw"},
+            {duration: 400, easing: 'easeOutCubic', queue: false});
+        $(this).toggleClass("expanded")
+      }
+      else {
+        console.log("doesn't have class expanded");
+        $('.page-container').animate({position: 'relative', left: "+=55vw"},
+            {duration: 400, easing: 'easeOutCubic', queue: false});
+        $('.nav-container').animate({left: 0},
+            {duration: 400, easing: 'easeOutCubic', queue: false});
+        $(this).toggleClass("expanded")
+      }
+    });
+
+    //prevent page load for a tags
+    $('.nav-container .name-list a').on("click", function (e) {
+      e.preventDefault();
+    });
+
+    $('.day-drop dt a').on("click", function(event) {
+      //prevent page loag
+      event.preventDefault();
+      //toggle ul of options below
+      $('.day-drop dd ul').stop().toggle(300);
+    });
+
+    $('.day-drop dd ul li a').on("click", function(event){
+      event.preventDefault();
+
+      //change text displayed at top of list
+      $('.day-drop .day').html($(this).html());
+      //close list
+      $('.day-drop dd ul').stop().toggle(300).queue(false);
+
+      //PERFORM AJAX
+      getDay($(this).html().toString());
+    });
+
+    $.ajax({
+      type: "GET",
+      url: "/send-day",
+      data: {day: "MONDAY"},
+      success: function(result){
+        $('#timeline').html(result);
+      }
+    });
+  });
+
+
+</script>

@@ -1,0 +1,42 @@
+<div class="event">
+  <h1 class="event-name">Prize-winning Math</h1>
+  <p class="start">Start Time: 8:00AM</p>
+  <p class="end">End Time: 8:50AM</p>
+  <p class="location">Location: Fenton 1234</p>
+  <p class="days">Days: MWF</p>
+</div>
+<div class="event num2">
+  <h1 class="event-name">Computer Science I</h1>
+  <p class="start">Start Time: 9:00AM</p>
+  <p class="end">End Time: 9:50AM</p>
+  <p class="location">Location: Fenton 3445</p>
+  <p class="days">Days: MWF</p>
+</div>
+<%
+  counter = 8
+  13.times do
+    if counter < 12
+%>
+        <div id="time-block">
+          <h1 class="time"><%= counter %>:00AM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <% elsif counter == 12 %>
+        <div id="time-block">
+          <h1 class="time"><%= counter %>:00PM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <% else %>
+        <div id="time-block">
+          <h1 class="time"><%= counter - 12 %>:00PM</h1>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+          <span class="quarter-line"></span>
+        </div>
+    <%end
+      counter+=1
+      end %>
